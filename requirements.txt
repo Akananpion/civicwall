@@ -1,6 +1,7 @@
 asgiref==3.8.1
 Django==5.1.1
 django-cors-headers==4.4.0
+django-tailwind==3.8.0
 djangorestframework==3.15.2
 gunicorn==23.0.0
 iniconfig==2.0.0
