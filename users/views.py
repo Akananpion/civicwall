@@ -11,6 +11,9 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from django.db import IntegrityError
+from django.contrib.auth import logout
+from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 
 
 def send_verification_email(request, user):
@@ -104,3 +107,15 @@ def update_profile_picture(request):
     else:
         form = ProfilePictureForm(instance=request.user)
     return render(request, 'users/update_profile_picture.html', {'form': form})
+
+
+@require_http_methods(["GET", "POST"])
+def custom_logout(request):
+    logout(request)
+    messages.success(request, _('You have been successfully logged out.'))
+    return redirect('home')
+
+
+@login_required
+def home(request):
+    return render(request, 'users/home.html')
