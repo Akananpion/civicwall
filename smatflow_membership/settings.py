@@ -10,8 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -151,3 +157,18 @@ LANGUAGES = [
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
+
+# Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+DEFAULT_FROM_EMAIL = getenv("DEFAULT_FROM_EMAIL", "civicflow@smatflow.com")
+# DEFAULT_EMAIL_FROM = 'admin@smatflow.com'
+EMAIL_HOST = getenv("EMAIL_HOST", "mail.smatflow.net")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_FROM = getenv("EMAIL_FROM", "civicflow@smatflow.com")
+EMAIL_HOST_USER = getenv("EMAIL_HOST_USER", "djangouser@smatflow.com")
+EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD", "MvYRQQgJVUS3")
+
+PASSWORD_RESET_TIMEOUT = 14400
