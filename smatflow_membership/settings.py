@@ -162,14 +162,14 @@ LOCALE_PATHS = [
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-DEFAULT_FROM_EMAIL = getenv("DEFAULT_FROM_EMAIL", "civicflow@smatflow.com")
+DEFAULT_FROM_EMAIL = getenv("DEFAULT_FROM_EMAIL")
 # DEFAULT_EMAIL_FROM = 'admin@smatflow.com'
-EMAIL_HOST = getenv("EMAIL_HOST", "mail.smatflow.net")
+EMAIL_HOST = getenv("EMAIL_HOST")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_FROM = getenv("EMAIL_FROM", "civicflow@smatflow.com")
-EMAIL_HOST_USER = getenv("EMAIL_HOST_USER", "djangouser@smatflow.com")
-EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD", "MvYRQQgJVUS3")
+EMAIL_FROM = getenv("EMAIL_FROM")
+EMAIL_HOST_USER = getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD")
 
 PASSWORD_RESET_TIMEOUT = 14400
 
