@@ -4,8 +4,6 @@ default:
 
 stages:
   - deploy-dev
-  # - deploy-test
-  # - deploy-prod
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
