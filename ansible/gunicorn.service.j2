@@ -1,0 +1,17 @@
+[Unit]
+Description=Gunicorn daemon
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+Environment="DJANGO_DEBUG=False"
+# Environment="DJANGO_SETTINGS_MODULE={{ project_name }}.settings.production"
+User={{ ansible_user }}
+Group={{ ansible_user }}
+WorkingDirectory={{ project_dir }}/membership
+ExecStart={{ virtualenv_dir }}/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 {{ project_name }}.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

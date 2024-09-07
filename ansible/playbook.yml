@@ -1,0 +1,116 @@
+---
+- name: Deploy
+  hosts: all
+  become: false
+  vars:
+    project_name: "smatflow_membership"
+    project_dir: "/home/{{ ansible_user }}/smatflow_membership"
+
+  tasks:
+    - name: Install Dkr dependencies
+      become: true
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - software-properties-common
+        - python3-pip
+        - python3-venv
+        - virtualenv
+        - python3-setuptools
+        - libpq-dev
+        - build-essential
+        - git
+        - python3-dev
+        - libldap2-dev
+        - libsasl2-dev
+        - libssl-dev
+
+    - include_tasks: nodejs.yaml
+      vars:
+        nodejs_version: 20
+
+    - name: Clone Git repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ project_dir }}"
+        clone: yes
+        update: yes
+        force: true
+        version: main
+
+    - name: Template file .env.j2
+      ansible.builtin.template:
+        src: .env.j2
+        dest: "{{ project_dir }}/.env"
+        force: true
+
+    - set_fact:
+        virtualenv_dir: "{{ project_dir }}/.venv"
+
+    - name: Create venv
+      command: "python3 -m venv .venv"
+      args:
+        chdir: "{{ project_dir }}"
+        creates: "{{ virtualenv_dir }}"
+
+    - name: Install gunicorn python package
+      ansible.builtin.pip:
+        name: gunicorn
+        virtualenv: "{{ virtualenv_dir }}"
+        virtualenv_python: python3
+
+    - name: Install specified python requirements
+      ansible.builtin.pip:
+        requirements: "{{ project_dir }}/requirements.txt"
+        virtualenv: "{{ virtualenv_dir }}"
+        virtualenv_python: python3
+
+    - set_fact:
+        executable_py: "{{ virtualenv_dir }}/bin/python3"
+
+    - name: Run Django migrate
+      command: "{{ executable_py }} manage.py migrate"
+      args:
+        chdir: "{{ project_dir }}"
+
+    - name: Install Tailwind CSS dependencies
+      command: "{{ executable_py }} manage.py tailwind install"
+      args:
+        chdir: "{{ project_dir }}"
+
+    - name: Build Tailwind CSS
+      command: "{{ executable_py }} manage.py tailwind build"
+      args:
+        chdir: "{{ project_dir }}"
+
+    - name: Configure Gunicorn to run as a service
+      become: true
+      template:
+        force: yes
+        src: gunicorn.service.j2
+        dest: "/etc/systemd/system/{{ project_name }}.service"
+      notify:
+        - Reload systemd
+        - Restart gunicorn service
+
+    - name: Enable and start Gunicorn service
+      become: true
+      systemd:
+        name: "{{ project_name }}"
+        enabled: yes
+        state: restarted
+        daemon_reload: yes
+
+  handlers:
+    - name: Reload systemd
+      become: true
+      systemd:
+        daemon_reload: yes
+
+    - name: Restart gunicorn service
+      become: true
+      systemd:
+        name: "{{ project_name }}"
+        state: restarted
