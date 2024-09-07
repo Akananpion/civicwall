@@ -119,3 +119,17 @@ def custom_logout(request):
 @login_required
 def home(request):
     return render(request, 'users/home.html')
+
+
+def custom_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, _('You have successfully logged in.'))
+            return redirect('home')
+        else:
+            messages.error(request, _('Invalid username or password.'))
+    return render(request, 'users/login.html')
