@@ -33,6 +33,23 @@ set -u
 set -u
 : "${POSTGRES_PORT}"
 
+# EMAIL
+
+set -u
+: "${EMAIL_HOST}"
+
+set -u
+: "${EMAIL_PORT}"
+
+set -u
+: "${EMAIL_USE_TLS}"
+
+set -u
+: "${DEFAULT_FROM_EMAIL}"
+
+set -u
+: "${EMAIL_HOST_PASSWORD}"
+
 # GENERAL
 
 set -u
