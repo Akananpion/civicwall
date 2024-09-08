@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "theme",
     "django_browser_reload",
     "django_countries",
+    "civicwall",
 ]
 
 TAILWIND_APP_NAME = 'theme'
