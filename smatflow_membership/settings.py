@@ -60,6 +60,16 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+
+ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS",
+                       "127.0.0.1,localhost").split(",")
+CSRF_TRUSTED_ORIGINS = getenv(
+    "CSRF_TRUSTED_ORIGINS", "https://civicwall.etiolles.smatflow.net"
+).split(",")
+
+BASE_URL = getenv("BASE_URL", "https://civicwall.etiolles.smatflow.net")
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,12 +108,24 @@ WSGI_APPLICATION = 'smatflow_membership.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": getenv("POSTGRES_DB"),
+        "USER": getenv("POSTGRES_USER"),
+        "PASSWORD": getenv("POSTGRES_PASSWORD"),
+        "HOST": getenv("POSTGRES_HOST"),
+        "PORT": getenv("POSTGRES_PORT"),
     }
 }
+
 
 
 # Password validation
