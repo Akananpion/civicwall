@@ -10,7 +10,7 @@ Environment="DJANGO_DEBUG=False"
 # Environment="DJANGO_SETTINGS_MODULE={{ project_name }}.settings.production"
 User={{ ansible_user }}
 Group={{ ansible_user }}
-WorkingDirectory={{ project_dir }}/membership
+WorkingDirectory={{ project_dir }}
 ExecStart={{ virtualenv_dir }}/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 {{ project_name }}.wsgi:application
 
 [Install]
