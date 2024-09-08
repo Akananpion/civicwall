@@ -149,6 +149,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+LANGUAGE_CODE = 'en'
+
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
 LANGUAGES = [
     ('en', _('English')),
     ('fr', _('French')),
