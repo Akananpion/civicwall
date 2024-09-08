@@ -58,11 +58,12 @@ TAILWIND_APP_NAME = 'theme'
 
 INTERNAL_IPS = [
     "127.0.0.1",
+    "192.168.50.73",
 ]
 
 
 ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS",
-                       "127.0.0.1,localhost").split(",")
+                       "127.0.0.1,192.168.50.73,localhost").split(",")
 CSRF_TRUSTED_ORIGINS = getenv(
     "CSRF_TRUSTED_ORIGINS", "https://civicwall.etiolles.smatflow.net"
 ).split(",")
