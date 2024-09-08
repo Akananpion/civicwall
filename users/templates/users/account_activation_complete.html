@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Account Activated</h2>
-    <p class="mb-4">Your account has been successfully activated. You can now log in.</p>
-    <a href="{% url 'login' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Log In</a>
+    <h2 class="text-2xl font-bold mb-4">{% trans "Account Activated" %}</h2>
+    <p class="mb-4">{% trans "Your account has been successfully activated. You can now log in." %}</p>
+    <a href="{% url 'login' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{% trans "Log In" %}</a>
 </div>
 {% endblock %}
