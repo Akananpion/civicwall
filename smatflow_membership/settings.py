@@ -202,9 +202,9 @@ LANGUAGES = [
     ('fr', _('French')),
 ]
 
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
+# LOCALE_PATHS = [
+#     BASE_DIR / 'locale',
+# ]
 
 # Email settings
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
