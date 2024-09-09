@@ -11,9 +11,10 @@
 
     {% load static %}
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}" />
-    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/icons.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tailwind.css' %}" />
+
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -195,11 +196,12 @@
         </div>
     </div>
     
-    <script src="https://unicons.iconscout.com/release/v4.0.0/script/monochrome/bundle.js"></script>
-    <script src="{% static 'assets/libs/@popperjs/core/umd/popper.min.js' %}"></script>
-    <script src="{% static 'assets/libs/simplebar/simplebar.min.js' %}"></script>
-    <script src="{% static 'assets/js/pages/switcher.js' %}"></script>
-    <script src="{% static 'assets/js/app.js' %}"></script>
+    <script type="text/javascript" src="https://unicons.iconscout.com/release/v4.0.0/script/monochrome/bundle.js"></script>
+    <script type="text/javascript" src="{% static 'assets/libs/@popperjs/core/umd/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/libs/simplebar/simplebar.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/pages/switcher.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/app.js' %}"></script>
+
     
     {% block extra_js %}{% endblock %}
 
