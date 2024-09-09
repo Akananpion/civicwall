@@ -20,10 +20,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = os.path.dirname(PROJECT_DIR)
+# BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -202,9 +202,9 @@ LANGUAGES = [
     ('fr', _('French')),
 ]
 
-# LOCALE_PATHS = [
-#     BASE_DIR / 'locale',
-# ]
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Email settings
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
