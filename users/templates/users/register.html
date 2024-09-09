@@ -1,49 +1,73 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "base2.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% load i18n %}  <!-- Charger le module de traduction -->
+
+{% block title %}{% trans "Sign Up | Jobcy" %}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      {% trans "Create your account" %}
-    </h2>
-  </div>
+<div class="main-content mt-24">
+    <div class="page-content">
+        <section class="flex items-center justify-center min-h-screen py-10 group-data-[theme-color=violet]:bg-violet-500/10 group-data-[theme-color=sky]:bg-sky-500/10 group-data-[theme-color=red]:bg-red-500/10 group-data-[theme-color=green]:bg-green-500/10 group-data-[theme-color=pink]:bg-pink-500/10 group-data-[theme-color=blue]:bg-blue-500/10 dark:bg-neutral-700">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-12 lg:col-span-10 lg:col-start-2">
+                        <div class="flex flex-col bg-white rounded-lg dark:bg-neutral-800">
+                            <div class="grid flex-col grid-cols-12">
+                                <div class="col-span-6 ltr:rounded-l-lg rtl:rounded-r-lg">
+                                    <div class="p-10">
+                                        <a href="{% url 'home' %}">
+                                            <img src="{% static 'assets/images/logo-light.png' %}" alt="" class="hidden mx-auto dark:block">
+                                            <img src="{% static 'assets/images/logo-dark.png' %}" alt="" class="block mx-auto dark:hidden">
+                                        </a>
+                                        <div class="mt-5">
+                                            <img src="{% static 'assets/images/auth/sign-up.png' %}" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-span-12 rounded-b-md lg:col-span-6 group-data-[theme-color=violet]:bg-violet-700 group-data-[theme-color=sky]:bg-sky-700 group-data-[theme-color=red]:bg-red-700 group-data-[theme-color=green]:bg-green-700 group-data-[theme-color=pink]:bg-pink-700 group-data-[theme-color=blue]:bg-blue-700 lg:rounded-b-none lg:ltr:rounded-r-lg rtl:rounded-l-lg">
+                                    <div class="flex flex-col justify-center h-full p-12">
+                                        <div class="text-center">
+                                            <h5 class="text-[18.5px] text-white">{% trans "Create your account" %}</h5>
+                                            <p class="mt-3 text-gray-50">{% trans "Sign up to start accessing Jobcy" %}</p>
+                                        </div>
+                                        <form action="{% url 'register' %}" method="POST" class="mt-8" id="registerForm">
+                                            {% csrf_token %}
+                                            
+                                            {% for field in form %}
+                                            <div class="mb-5">
+                                                <label class="block mb-2 text-white" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                                {{ field.errors }}
+                                                {{ field|add_class:"w-full mt-1 group-data-[theme-color=violet]:bg-violet-400/40 py-2.5 rounded border-transparent placeholder:text-sm placeholder:text-gray-50 text-white" }}
+                                            </div>
+                                            {% endfor %}
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-xl items-center">
-    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-      <form class="space-y-6" action="{% url 'register' %}" method="POST" id="registerForm">
-          {% csrf_token %}
-          {% for field in form %}
-              <div>
-                  <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
-                      {{ field.label }}
-                  </label>
-                  <div class="mt-1">
-                      {{ field }}
-                  </div>
-                  {% if field.errors %}
-                      <p class="mt-2 text-sm text-red-600">
-                          {{ field.errors|join:", " }}
-                      </p>
-                  {% endif %}
-              </div>
-          {% endfor %}
-          <div>
-              <button type="submit" id="registerBtn" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  {% trans "Register" %}
-              </button>
-          </div>
-      </form>
+                                            <div class="my-5 text-center">
+                                                <button type="submit" id="registerBtn" class="btn w-full bg-white text-gray-900 font-medium border-transparent hover:-translate-y-1.5 duration-500 ease">{% trans "Register" %}</button>
+                                            </div>
+                                        </form>
+
+                                        <div class="text-center">
+                                            <p class="text-white">{% trans "Already have an account?" %} <a href="{% url 'login' %}" class="text-white underline fw-medium">{% trans "Login" %}</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </div>
 </div>
 
+<!-- Script pour désactiver le bouton lors de la soumission -->
 <script>
-  document.getElementById('registerForm').addEventListener('submit', function(e) {
-      var registerBtn = document.getElementById('registerBtn');
-      registerBtn.disabled = true;
-      registerBtn.innerHTML = '{% trans "Registering..." %}';
-      registerBtn.classList.add('opacity-50', 'cursor-not-allowed');
-  });
-  </script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        var registerBtn = document.getElementById('registerBtn');
+        registerBtn.disabled = true;
+        registerBtn.innerHTML = '{% trans "Registering..." %}';
+        registerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+</script>
 {% endblock %}
