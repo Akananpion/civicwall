@@ -15,10 +15,16 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserChangeForm(forms.ModelForm):
+    email = forms.EmailField(disabled=True)
+
     class Meta:
         model = CustomUser
-        fields = ('email', 'first_name', 'last_name', 'phone_number', 'country', 'region', 'city', 'profile_picture')
+        fields = ('first_name', 'last_name', 'phone_number', 'country', 'region', 'city', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['readonly'] = True
 
 class ProfilePictureForm(forms.ModelForm):
     class Meta:
