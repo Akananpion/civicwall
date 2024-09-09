@@ -92,10 +92,16 @@ def profile(request):
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, _('Your profile has been updated.'))
             return redirect('profile')
     else:
         form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'users/profile.html', {'form': form})
+    
+    context = {
+        'form': form,
+        'user': request.user
+    }
+    return render(request, 'users/profile.html', context)
 
 @login_required
 def update_profile_picture(request):
@@ -103,6 +109,7 @@ def update_profile_picture(request):
         form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, _('Your profile picture has been updated.'))
             return redirect('profile')
     else:
         form = ProfilePictureForm(instance=request.user)
