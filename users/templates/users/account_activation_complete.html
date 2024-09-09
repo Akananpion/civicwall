@@ -1,10 +1,50 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
+
+{% load static %}
 {% load i18n %}
+{% block title %}Account Activation Complete | Jobcy{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">{% trans "Account Activated" %}</h2>
-    <p class="mb-4">{% trans "Your account has been successfully activated. You can now log in." %}</p>
-    <a href="{% url 'login' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{% trans "Log In" %}</a>
+<div class="main-content mt-24">
+    <div class="page-content">
+        <section class="flex items-center justify-center min-h-screen py-10 group-data-[theme-color=violet]:bg-violet-500/10 group-data-[theme-color=sky]:bg-sky-500/10 group-data-[theme-color=red]:bg-red-500/10 group-data-[theme-color=green]:bg-green-500/10 group-data-[theme-color=pink]:bg-pink-500/10 group-data-[theme-color=blue]:bg-blue-500/10 dark:bg-neutral-700">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-12 lg:col-span-10 lg:col-start-2">
+                        <div class="flex flex-col bg-white rounded-lg dark:bg-neutral-800">
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-6 ltr:rounded-l-lg rtl:rounded-r-lg">
+                                    <div class="p-10">
+                                        <a href="{% url 'home' %}">
+                                            <img src="{% static 'assets/images/logo-light.png' %}" alt="" class="hidden mx-auto dark:block">
+                                            <img src="{% static 'assets/images/logo-dark.png' %}" alt="" class="block mx-auto dark:hidden">
+                                        </a>
+                                        <div class="mt-5">
+                                            <img src="{% static 'assets/images/auth/account-activated.png' %}" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-span-12 lg:col-span-6 group-data-[theme-color=violet]:bg-violet-700 group-data-[theme-color=sky]:bg-sky-700 group-data-[theme-color=red]:bg-red-700 group-data-[theme-color=green]:bg-green-700 group-data-[theme-color=pink]:bg-pink-700 group-data-[theme-color=blue]:bg-blue-700 lg:rounded-b-none lg:ltr:rounded-r-lg rtl:rounded-l-lg">
+                                    <div class="flex flex-col justify-center h-full p-12">
+                                        <div class="text-center">
+                                            <h5 class="text-[18.5px] text-white font-bold">{% trans "Account Activated" %}</h5>
+                                            <p class="mt-4 text-gray-50">
+                                                {% trans "Your account has been successfully activated. You can now log in." %}
+                                            </p>
+                                            <div class="mt-6">
+                                                <a href="{% url 'login' %}" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-900 bg-white hover:-translate-y-1.5 duration-500 ease">
+                                                    {% trans "Log In" %}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </div>
 {% endblock %}
