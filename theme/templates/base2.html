@@ -1,191 +1,94 @@
 {% load static tailwind_tags %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}" dir="ltr" data-mode="light" class="scroll-smooths group" data-theme-color="violet">
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}Smatflow{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta content="Tailwind Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="" name="Themesbrand" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<html lang="{{ LANGUAGE_CODE }}">
+	<head>
+    	<title>{% block title %}Civic Wall{% endblock %}</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    	<script src="https://cdn.tailwindcss.com"></script>
+		{% tailwind_css %}
+	</head>
 
-    <!-- App favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/icons.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tailwind.css' %}" />
+	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+		<nav class="bg-gray-800">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex items-center justify-between h-16">
+					<div class="flex items-center">
+						<a href="{% url 'home' %}" class="text-white font-bold">Civicwall</a>
+					</div>
+					<div class="flex">
+						<div class="flex items-center">
+							{% if user.is_authenticated %}
+								<a href="{% url 'home' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Home" %}</a>
+								<a href="{% url 'logout' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Logout" %}</a>
+							{% else %}
+								<a href="{% url 'login' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Login" %}</a>
+								<a href="{% url 'register' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Register" %}</a>
+							{% endif %}
+						</div>
+						<div class="ml-3 relative">
+							<form action="{% url 'set_language' %}" method="post">
+								{% csrf_token %}
+								<input name="next" type="hidden" value="{{ request.path }}">
+								<select name="language" onchange="this.form.submit()"
+										class="block appearance-none bg-gray-800 border border-gray-700 text-white py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-700 focus:border-gray-500">
+									{% get_current_language as LANGUAGE_CODE %}
+									{% get_available_languages as LANGUAGES %}
+									{% get_language_info_list for LANGUAGES as languages %}
+									{% for language in languages %}
+										<option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+											{{ language.name_local }} ({{ language.code }})
+										</option>
+									{% endfor %}
+								</select>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</nav>
+	
+		<!-- Floating message container -->
+		<div id="message-container" class="fixed top-16 right-10 z-50">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="message mb-2 p-4 rounded shadow-lg {% if message.tags == 'error' %}bg-red-100 border-red-400 text-red-700{% else %}bg-green-100 border-green-400 text-green-700{% endif %}" role="alert">
+						<span class="block sm:inline">{{ message }}</span>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	
+		<div class="container mx-auto mt-4">
+			{% block content %}
+			{% endblock %}
+		</div>
 
-
-    {% block extra_css %}{% endblock %}
-</head>
-<body class="bg-white dark:bg-neutral-800">
-
-
-<div class="hidden px-5 mx-auto border-gray-200 container-fluid lg:px-24 bg-gray-50 md:block dark:bg-neutral-600">
-    <div class="grid items-center grid-cols-12">
-        <div class="col-span-7">
-            <ul class="flex items-center py-3">
-                <li class="ltr:mr-4 rtl:ml-4">
-                    <p class="mb-0 text-gray-800 text-13 dark:text-gray-50"> <i class="mdi mdi-social-network"></i> {% trans 'Contact us:' %} <a href="javascript:void(0)" class="font-medium"></a></p>
-                </li>
-                <li>
-                    <ul class="flex flex-wrap gap-4 text-gray-800 ">
-                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-whatsapp"></i></a></li>
-                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-facebook-messenger-alt"></i></a></li>
-                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-instagram"></i></a></li>
-                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-envelope"></i></a></li>
-                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-twitter-alt"></i></a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="col-span-5 ltr:ml-auto rtl:mr-auto">
-            <ul class="flex items-center gap-4">
-                <li>
-                    <a href="{% url 'register'%}" class="py-3 font-medium text-gray-800 text-13 dark:text-gray-50" data-tw-toggle="modal" data-tw-target="#modal-id_form"><i class="uil uil-lock ltr:mr-1 rtl:ml-1"></i>{% trans "Register" %}</a>
-               
-                    
-                </li>
-                <li>
-                    <div class="relative hidden dropdown language sm:block">
-                        <button class="px-4 py-3 border-0 btn dropdown-toggle" type="button" data-dropdown-toggle="navNotifications">
-                            <img src="{% static 'assets/images/flags/us.jpg' %}" alt="" class="h-4" id="header-lang-img">
-                        </button>
-                        <div class="absolute z-50 hidden w-40 bg-white rounded shadow dropdown-menu" id="navNotifications">
-                            <ul class="border">
-                                <form action="{% url 'set_language' %}" method="post">
-                                    {% csrf_token %}
-                                    <input name="next" type="hidden" value="{{ request.path }}">
-                                    <select name="language" onchange="this.form.submit(); updateFlag(this.value);" class="block w-full px-4 py-2 text-sm text-gray-700 bg-white border-0 appearance-none hover:bg-gray-50/50 dark:text-gray-200">
-                                        {% get_current_language as LANGUAGE_CODE %}
-                                        {% get_available_languages as LANGUAGES %}
-                                        {% get_language_info_list for LANGUAGES as languages %}
-                                        {% for language in languages %}
-                                            <option id="lang-{{ language.code }}" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                                <img src="{% static 'assets/images/flags/'|add:language.code|add:'.jpg' %}" alt="{{ language.name_local }}" class="inline-block h-3 mr-1"> {{ language.name_local }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    
-                                </form>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-    
-    <nav class="navbar fixed right-0 left-0 top-0 lg:top-[44.5px] px-5 lg:px-24 transition-all duration-500 ease shadow-lg shadow-gray-200/20 bg-white border-gray-200 dark:bg-neutral-800 z-40 dark:shadow-neutral-900" id="navbar">
-        <div class="mx-auto container-fluid">
-            <div class="flex flex-wrap items-center justify-between mx-auto">
-                <a href="index.html" class="flex items-center">
-                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="" class="logo-dark h-[22px] block dark:hidden">
-                    <img src="{% static 'assets/images/logo-light.png' %}" alt="" class="logo-dark h-[22px] hidden dark:block">
-                </a>
-                <button data-collapse-toggle="navbar-collapse" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg navbar-toggler group lg:hidden hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                </button>
-                <div class="flex items-center lg:order-2">
-                    
-                    <div>
-                        <div class="relative dropdown ltr:mr-4 rtl:ml-4">
-                            <button type="button" class="flex items-center px-4 py-5 dropdown-toggle" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <img class="w-8 h-8 rounded-full ltr:xl:mr-2 rtl:xl:ml-2" src="{% static 'assets/images/user/img-02.jpg' %}" alt="Header Avatar">
-                                <span class="hidden fw-medium xl:block dark:text-gray-50">Shawn L.</span>
-                            </button>
-                            <ul class="absolute top-auto z-50 hidden w-48 p-3 list-none bg-white border rounded shadow-lg dropdown-menu border-gray-500/20 xl:ltr:-left-3 ltr:-left-32 rtl:-right-3 dark:bg-neutral-800" id="profile/log" aria-labelledby="navNotifications">
-                                <li class="p-2 dropdown-item group/dropdown dark:text-gray-300">
-                                    <a class="text-15 font-medium text-gray-800  group-data-[theme-color=violet]:group-hover/dropdown:text-violet-500 group-data-[theme-color=sky]:group-hover/dropdown:text-sky-500 group-data-[theme-color=red]:group-hover/dropdown:text-red-500 group-data-[theme-color=green]:group-hover/dropdown:text-green-500 group-data-[theme-color=pink]:group-hover/dropdown:text-pink-500 group-data-[theme-color=blue]:group-hover/dropdown:text-blue-500 group-hover:pl-1.5 transition-all duration-300 ease-in dark:text-gray-50" href="manage-jobs.html">Manage Jobs</a>
-                                </li>
-                                <li class="p-2 dropdown-item group/dropdown dark:text-gray-300">
-                                    <a class="text-15 font-medium text-gray-800 group-data-[theme-color=violet]:group-hover/dropdown:text-violet-500 group-data-[theme-color=sky]:group-hover/dropdown:text-sky-500 group-data-[theme-color=red]:group-hover/dropdown:text-red-500 group-data-[theme-color=green]:group-hover/dropdown:text-green-500 group-data-[theme-color=pink]:group-hover/dropdown:text-pink-500 group-data-[theme-color=blue]:group-hover/dropdown:text-blue-500 group-hover:pl-1.5 transition-all duration-300 ease-in dark:text-gray-50" href="bookmark-jobs.html">Bookmarks Jobs</a>
-                                </li>
-                                <li class="p-2 dropdown-item group/dropdown dark:text-gray-300">
-                                    <a class="text-15 font-medium text-gray-800 group-data-[theme-color=violet]:group-hover/dropdown:text-violet-500 group-data-[theme-color=sky]:group-hover/dropdown:text-sky-500 group-data-[theme-color=red]:group-hover/dropdown:text-red-500 group-data-[theme-color=green]:group-hover/dropdown:text-green-500 group-data-[theme-color=pink]:group-hover/dropdown:text-pink-500 group-data-[theme-color=blue]:group-hover/dropdown:text-blue-500 group-hover:pl-1.5 transition-all duration-300 ease-in dark:text-gray-50" href="profile.html">My Profile</a>
-                                </li>
-                                <li class="p-2 dropdown-item group/dropdown dark:text-gray-300">
-                                    <a class="text-15 font-medium text-gray-800 group-data-[theme-color=violet]:group-hover/dropdown:text-violet-500 group-data-[theme-color=sky]:group-hover/dropdown:text-sky-500 group-data-[theme-color=red]:group-hover/dropdown:text-red-500 group-data-[theme-color=green]:group-hover/dropdown:text-green-500 group-data-[theme-color=pink]:group-hover/dropdown:text-pink-500 group-data-[theme-color=blue]:group-hover/dropdown:text-blue-500 group-hover:pl-1.5 transition-all duration-300 ease-in dark:text-gray-50" href="sign-out.html">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="navbar-collapse" class="navbar-res items-center justify-between w-full text-sm lg:flex lg:w-auto lg:order-1 group-focus:[.navbar-toggler]:block hidden">
-                    <ul class="flex flex-col items-start mt-5 mb-10 font-medium lg:mt-0 lg:mb-0 lg:items-center lg:flex-row" id="navigation-menu">
-                        <li class="relative dropdown">
-                            <button class="py-5 text-gray-800 lg:px-4 dropdown-toggle dark:text-gray-50 lg:h-[70px]" id="home" data-bs-toggle="dropdown">{%trans "Home"%} <i class='align-middle bx bxs-chevron-down ltr:ml-1 rtl:mr-1'></i></button>
-
-                            <ul class="relative top-auto z-50 w-full py-2 list-none bg-white border-0 rounded dropdown-menu lg:border border-gray-500/20 lg:absolute ltr:-left-3 rtl:-right-3 lg:w-48 lg:shadow-lg dark:bg-neutral-800 " aria-labelledby="home">
-                                <li class="w-full">
-                                    <a
-                                    class="block w-full px-4 py-2 text-13 font-medium text-gray-700 duration-300 bg-transparent dropdown-item whitespace-nowrap hover:translate-x-1.5 group-data-[theme-color=violet]:hover:text-violet-500 group-data-[theme-color=sky]:hover:text-sky-500 group-data-[theme-color=red]:hover:text-red-500 group-data-[theme-color=green]:hover:text-green-500 group-data-[theme-color=pink]:hover:text-pink-500 group-data-[theme-color=blue]:hover:text-blue-500 uppercase group-data-[mode=dark]:text-gray-50"
-                                    href="index.html">Home 1</a>
-                                </li>
-                                <li class="w-full"><a class="block w-full px-4 py-2 text-13 font-medium text-gray-700 duration-300 bg-transparent dropdown-item whitespace-nowrap hover:translate-x-1.5 group-data-[theme-color=violet]:hover:text-violet-500 group-data-[theme-color=sky]:hover:text-sky-500 group-data-[theme-color=red]:hover:text-red-500 group-data-[theme-color=green]:hover:text-green-500 group-data-[theme-color=pink]:hover:text-pink-500 group-data-[theme-color=blue]:hover:text-blue-500 uppercase group-data-[mode=dark]:text-gray-50" href="index-2.html">Home 2</a >
-                                </li>
-                                <li class="w-full"><a class="block w-full px-4 py-2 text-13 font-medium text-gray-700 duration-300 bg-transparent dropdown-item whitespace-nowrap hover:translate-x-1.5 group-data-[theme-color=violet]:hover:text-violet-500 group-data-[theme-color=sky]:hover:text-sky-500 group-data-[theme-color=red]:hover:text-red-500 group-data-[theme-color=green]:hover:text-green-500 group-data-[theme-color=pink]:hover:text-pink-500 group-data-[theme-color=blue]:hover:text-blue-500 uppercase group-data-[mode=dark]:text-gray-50" href="index-3.html">Home 3</a>
-                                </li>
-                            </ul>
-                        </li>
-                        
-                        
-                        
-                        <li class="py-5 lg:px-4">
-                            <a href="contact.html" class="py-2.5 text-gray-800 font-medium leading-tight dark:text-gray-50" id="contact" data-bs-toggle="dropdown">{%trans "Contact"%} </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-    
-    
-    
-    <a href="javascript: void(0);" onclick="toggleSwitcher()" class="fixed z-40 flex flex-col gap-3 px-4 py-3 font-normal text-white group-data-[theme-color=violet]:bg-violet-500 group-data-[theme-color=sky]:bg-sky-500 group-data-[theme-color=red]:bg-red-500 group-data-[theme-color=green]:bg-green-500 group-data-[theme-color=pink]:bg-pink-500 group-data-[theme-color=blue]:bg-blue-500 top-96 text-14 ltr:rounded-r rtl:rounded-l">
-        <i class="text-xl mdi mdi-cog mdi-spin"></i>
-    </a>
-    
-    <div class="main-content">
-        <div class="page-content">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
-    
-    <script type="text/javascript" src="https://unicons.iconscout.com/release/v4.0.0/script/monochrome/bundle.js"></script>
-    <script type="text/javascript" src="{% static 'assets/libs/@popperjs/core/umd/popper.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/libs/simplebar/simplebar.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/pages/switcher.js' %}"></script>
-    <script type="text/javascript" src="{% static 'assets/js/app.js' %}"></script>
-
-    
-    {% block extra_js %}{% endblock %}
-
-    <script>
-        const flagMap = {
-            'en': 'us.jpg',
-            'fr': 'french.jpg'
-            // Ajoutez d'autres langues ici si nécessaire
-        };
-    
-        function updateFlag(languageCode) {
-            const flagImg = document.getElementById('header-lang-img');
-            const flagFileName = flagMap[languageCode] || 'us.jpg'; // Utilisez 'us.jpg' par défaut si la langue n'est pas trouvée
-            flagImg.src = "{% static 'assets/images/flags/' %}" + flagFileName;
-        }
-    
-        // Initial call to set the flag on page load
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const selectedLanguage = document.querySelector('select[name="language"]').value;
-            updateFlag(selectedLanguage);
-        });
-    </script>
-    
-</body>
+		<script>
+			document.addEventListener('DOMContentLoaded', (event) => {
+				const messages = document.querySelectorAll('.message');
+				messages.forEach((message) => {
+					// Trigger reflow to enable transition
+					message.offsetHeight;
+		
+					// Show message with animation
+					message.classList.add('show');
+		
+					// Fade out after 3 seconds
+					setTimeout(() => {
+						message.style.opacity = '0';
+						message.style.transform = 'translateX(100%)';
+					}, 3000);
+		
+					// Remove from DOM after fade out
+					setTimeout(() => {
+						message.remove();
+					}, 5500);
+				});
+			});
+			</script>
+	</body>
 </html>
