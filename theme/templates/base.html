@@ -1,0 +1,94 @@
+{% load static tailwind_tags %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+	<head>
+    	<title>{% block title %}Civic Wall{% endblock %}</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    	<script src="https://cdn.tailwindcss.com"></script>
+		{% tailwind_css %}
+	</head>
+
+	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+		<nav class="bg-gray-800">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex items-center justify-between h-16">
+					<div class="flex items-center">
+						<a href="{% url 'home' %}" class="text-white font-bold">Civicwall</a>
+					</div>
+					<div class="flex">
+						<div class="flex items-center">
+							{% if user.is_authenticated %}
+								<a href="{% url 'home' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Home" %}</a>
+								<a href="{% url 'logout' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Logout" %}</a>
+							{% else %}
+								<a href="{% url 'login' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Login" %}</a>
+								<a href="{% url 'register' %}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{% trans "Register" %}</a>
+							{% endif %}
+						</div>
+						<div class="ml-3 relative">
+							<form action="{% url 'set_language' %}" method="post">
+								{% csrf_token %}
+								<input name="next" type="hidden" value="{{ request.path }}">
+								<select name="language" onchange="this.form.submit()"
+										class="block appearance-none bg-gray-800 border border-gray-700 text-white py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-700 focus:border-gray-500">
+									{% get_current_language as LANGUAGE_CODE %}
+									{% get_available_languages as LANGUAGES %}
+									{% get_language_info_list for LANGUAGES as languages %}
+									{% for language in languages %}
+										<option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+											{{ language.name_local }} ({{ language.code }})
+										</option>
+									{% endfor %}
+								</select>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</nav>
+	
+		<!-- Floating message container -->
+		<div id="message-container" class="fixed top-16 right-10 z-50">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="message mb-2 p-4 rounded shadow-lg {% if message.tags == 'error' %}bg-red-100 border-red-400 text-red-700{% else %}bg-green-100 border-green-400 text-green-700{% endif %}" role="alert">
+						<span class="block sm:inline">{{ message }}</span>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	
+		<div class="container mx-auto mt-4">
+			{% block content %}
+			{% endblock %}
+		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', (event) => {
+				const messages = document.querySelectorAll('.message');
+				messages.forEach((message) => {
+					// Trigger reflow to enable transition
+					message.offsetHeight;
+		
+					// Show message with animation
+					message.classList.add('show');
+		
+					// Fade out after 3 seconds
+					setTimeout(() => {
+						message.style.opacity = '0';
+						message.style.transform = 'translateX(100%)';
+					}, 3000);
+		
+					// Remove from DOM after fade out
+					setTimeout(() => {
+						message.remove();
+					}, 5500);
+				});
+			});
+			</script>
+	</body>
+</html>
