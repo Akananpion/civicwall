@@ -123,7 +123,7 @@ def custom_logout(request):
     return redirect('home')
 
 
-@login_required
+# @login_required
 def home(request):
     return render(request, 'users/home.html')
 
@@ -136,7 +136,7 @@ def custom_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, _('You have successfully logged in.'))
-            return redirect('home')
+            return redirect('profile')
         else:
             messages.error(request, _('Invalid username or password.'))
     return render(request, 'users/login.html')

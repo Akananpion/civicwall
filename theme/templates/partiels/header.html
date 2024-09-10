@@ -1,0 +1,19 @@
+    <meta charset="utf-8" />
+    <title>{% block title %}Smatflow{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta content="Tailwind Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="" name="Themesbrand" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {% load static %}
+    <!-- App favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/icons.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tailwind.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/libs/choices.js/public/assets/styles/choices.min.css' %}">
+
+    <!-- Swiper Css -->
+   <link rel="stylesheet" href="{% static 'assets/libs/swiper/swiper-bundle.min.css' %}">
+
+
+    {% block extra_css %}{% endblock %}

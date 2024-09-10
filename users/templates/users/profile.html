@@ -1,105 +1,228 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% load i18n %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="bg-purple-600 py-16">
-    <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-bold text-white">{% trans "My Profile" %}</h1>
-        <nav class="text-white mt-2">
-            <a href="{% url 'home' %}" class="hover:underline">{% trans "Home" %}</a> &gt;
-            <a href="{% url 'profile' %}" class="hover:underline">{% trans "My Profile" %}</a>
-        </nav>
+<div class="main-content">
+    <div class="page-content">
+        <!-- Header Section -->
+        <section class="pt-28 lg:pt-44 pb-28 bg-purple-500 bg-[url('{% static 'images/home/page-title.png' %}')] bg-center bg-cover relative">
+            <div class="container mx-auto">
+                <div class="grid">
+                    <div class="col-span-12">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4 text-[26px]">{% trans "My Profile" %}</h3>
+                            <div class="page-next">
+                                <nav class="inline-block" aria-label="breadcrumb text-center">
+                                    <ol class="flex justify-center text-sm font-medium uppercase">
+                                        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                                        <li><i class="bx bxs-chevron-right align-middle px-2.5"></i><a href="{% url 'profile' %}">{% trans "My Profile" %}</a></li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img src="{% static 'images/about/shape.png' %}" alt="" class="absolute block bg-cover -bottom-0 dark:hidden">
+            <img src="{% static 'images/about/shape-dark.png' %}" alt="" class="absolute hidden bg-cover -bottom-0 dark:block">
+        </section>
+
+        <!-- Main Content Section -->
+        <section class="py-20">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-12 gap-y-10 lg:gap-10">
+                    <!-- Left Column -->
+                    <div class="col-span-12 lg:col-span-4">
+                        <div class="border rounded border-gray-100/50 dark:border-neutral-600">
+                            <!-- Profile Info -->
+                            <div class="p-5 border-b border-gray-100/50 dark:border-neutral-600">
+                                <div class="text-center">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="w-20 h-20 p-1 mx-auto border-2 rounded-full border-gray-200/20">
+                                    {% else %}
+                                        <img src="{% static 'images/default_profile.png' %}" alt="{{ user.get_full_name }}" class="w-20 h-20 p-1 mx-auto border-2 rounded-full border-gray-200/20">
+                                    {% endif %}
+                                    <h6 class="mt-4 mb-0 text-lg text-gray-900 dark:text-gray-50">{{ user.get_full_name }}</h6>
+                                    <p class="mb-4 text-gray-500 dark:text-gray-300">{{ user.profile.job_title }}</p>
+                                    <!-- Social Media Links -->
+                                    <ul class="flex flex-wrap justify-center gap-2 mb-0">
+                                        <!-- Add your social media links here -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Documents Section -->
+                            <div class="p-5">
+                                <div class="pb-5 border-b border-gray-100/50 dark:border-neutral-600">
+                                    <h6 class="mb-5 font-semibold text-gray-900 text-17 dark:text-gray-50">{% trans "Documents" %}</h6>
+                                    <ul>
+                                        <!-- Add your documents here -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Contacts Section -->
+                            <div class="p-5 pt-0">
+                                <h6 class="mb-3 font-semibold text-gray-900 text-17 dark:text-gray-50">{% trans "Contacts" %}</h6>
+                                <ul class="mb-0">
+                                    <li class="pb-3">
+                                        <div class="flex">
+                                            <label class="w-32 font-medium text-gray-900 dark:text-gray-50">{% trans "Email" %}</label>
+                                            <div>
+                                                <p class="mb-0 text-gray-500 text-break dark:text-gray-300">{{ user.email }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="pb-3">
+                                        <div class="flex">
+                                            <label class="w-32 font-medium text-gray-900 dark:text-gray-50">{% trans "Phone Number" %}</label>
+                                            <div>
+                                                <p class="mb-0 text-gray-500 dark:text-gray-300">{{ user.phone_number|default:_("Not provided") }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="pb-3">
+                                        <div class="flex">
+                                            <label class="w-32 font-medium text-gray-900 dark:text-gray-50">{% trans "Location" %}</label>
+                                            <div>
+                                                <p class="mb-0 text-gray-500 dark:text-gray-300">{{ user.city }}, {{ user.country.name }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="col-span-12 lg:col-span-8">
+                        <div class="border rounded border-gray-100/50 dark:border-neutral-600">
+                            <div class="p-6">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div>
+                                        <h5 class="mb-3 text-gray-900 fs-17 fw-semibold dark:text-gray-50">{% trans "My Account" %}</h5>
+                                        <div class="text-center">
+                                            <!-- Profile picture upload -->
+                                            <div class="relative mb-4">
+                                                {% if user.profile_picture %}
+                                                    <img src="{{ user.profile_picture.url }}" class="w-40 h-40 p-1 mx-auto border-2 rounded-full border-gray-100/50 dark:border-neutral-600" id="profile-img" alt="">
+                                                {% else %}
+                                                    <img src="{% static 'images/default_profile.png' %}" class="w-40 h-40 p-1 mx-auto border-2 rounded-full border-gray-100/50 dark:border-neutral-600" id="profile-img" alt="">
+                                                {% endif %}
+                                                <div class="absolute w-8 h-8 leading-8 text-center rounded-full shadow-md bottom-2 right-[42%] z-40 bg-gray-50 dark:bg-neutral-700 dark:text-white">
+                                                    <input id="profile-img-file-input" type="file" name="profile_picture" class="hidden" onchange="previewImg()">
+                                                    <label for="profile-img-file-input" class="">
+                                                        <i class="uil uil-edit"></i>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-5">
+                                            <div class="grid grid-cols-12 gap-5">
+                                                <div class="col-span-12 lg:col-span-6">
+                                                    <div class="mb-3">
+                                                        <label for="first_name" class="text-sm text-gray-900 dark:text-gray-50">{% trans "First Name" %}</label>
+                                                        {{ form.first_name|add_class:"w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent" }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-12 lg:col-span-6">
+                                                    <div class="mb-3">
+                                                        <label for="last_name" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Last Name" %}</label>
+                                                        {{ form.last_name|add_class:"w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent" }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-12 lg:col-span-6">
+                                                    <div class="mb-3">
+                                                        <label for="account_type" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Account Type" %}</label>
+                                                        <input type="text" value="{% trans 'Standard' %}" class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600 bg-gray-50 cursor-not-allowed" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-12 lg:col-span-6">
+                                                    <div class="mb-3">
+                                                        <label for="email" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Email" %}</label>
+                                                        {{ form.email|add_class:"w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent" }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <h5 class="mb-3 font-semibold text-gray-900 text-17 dark:text-gray-50">{% trans "Profile" %}</h5>
+                                        <div class="grid grid-cols-12 gap-5">
+                                            <div class="col-span-12">
+                                                <div class="mb-3">
+                                                    <label for="bio" class="form-label dark:text-gray-300">{% trans "Introduce Yourself" %}</label>
+                                                    <textarea class="w-full mt-1 text-sm rounded border-gray-100/50 dark:bg-transparent dark:border-neutral-600 dark:text-gray-300" name="bio" rows="5">{{ user.profile.bio }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-12 lg:col-span-6">
+                                                <div class="mb-3">
+                                                    <label for="language" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Language" %}</label>
+                                                    <select class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 dark:bg-transparent dark:border-neutral-600" name="language">
+                                                        <option value="en" {% if user.profile.language == 'en' %}selected{% endif %}>{% trans "English" %}</option>
+                                                        <option value="fr" {% if user.profile.language == 'fr' %}selected{% endif %}>{% trans "French" %}</option>
+                                                        <option value="es" {% if user.profile.language == 'es' %}selected{% endif %}>{% trans "Spanish" %}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-12 lg:col-span-6">
+                                                <div class="mb-3">
+                                                    <label for="city" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Location" %}</label>
+                                                    {% render_field form.city class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your city" %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <h5 class="mb-3 font-semibold text-17 dark:text-gray-50">{% trans "Change Password" %}</h5>
+                                        <div class="grid grid-cols-12 gap-5">
+                                            <div class="col-span-12">
+                                                <div class="mb-3">
+                                                    <label for="current_password" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Current password" %}</label>
+                                                    <input type="password" name="current_password" class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600" placeholder="{% trans 'Enter Current password' %}">
+                                                </div>
+                                            </div>
+                                            <div class="col-span-12 lg:col-span-6">
+                                                <div class="mb-3">
+                                                    <label for="new_password1" class="text-sm text-gray-900 dark:text-gray-50">{% trans "New password" %}</label>
+                                                    <input type="password" name="new_password1" class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600" placeholder="{% trans 'Enter new password' %}">
+                                                </div>
+                                            </div>
+                                            <div class="col-span-12 lg:col-span-6">
+                                                <div class="mb-3">
+                                                    <label for="new_password2" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Confirm Password" %}</label>
+                                                    <input type="password" name="new_password2" class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 text-13 dark:bg-transparent dark:border-neutral-600" placeholder="{% trans 'Confirm Password' %}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-8 text-right">
+                                        <button type="submit" class="text-white btn bg-purple-500 border-transparent focus:ring focus:ring-purple-500/20">{% trans "Update" %}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 
-<div class="container mx-auto px-4 py-8">
-    <div class="flex flex-wrap -mx-4">
-        <!-- Left Column -->
-        <div class="w-full md:w-1/3 px-4 mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="text-center">
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="rounded-full mx-auto mb-4 w-32 h-32 object-cover">
-                    {% else %}
-                        <img src="{% static 'images/default_profile.png' %}" alt="{{ user.get_full_name }}" class="rounded-full mx-auto mb-4 w-32 h-32 object-cover">
-                    {% endif %}
-                    <h2 class="text-2xl font-semibold">{{ user.get_full_name }}</h2>
-                    <div class="mt-4 flex justify-center space-x-2">
-                        <!-- Social media links here -->
-                    </div>
-                </div>
-                
-                <!-- Documents section -->
-                
-                <div class="mt-6">
-                    <h3 class="font-semibold mb-2">{% trans "Contacts" %}</h3>
-                    <p><strong>{% trans "Email:" %}</strong> {{ user.email }}</p>
-                    <p><strong>{% trans "Phone Number:" %}</strong> {{ user.phone_number|default:_("Not provided") }}</p>
-                    <p><strong>{% trans "Location:" %}</strong> {{ user.city }}, {{ user.country.name }}</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Right Column -->
-        <div class="w-full md:w-2/3 px-4">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <!-- Tabs -->
-                
-                <form method="POST" class="mt-6">
-                    {% csrf_token %}
-                    <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <label class="block mb-2">{% trans "First Name" %}</label>
-                            {{ form.first_name }}
-                        </div>
-                        <div>
-                            <label class="block mb-2">{% trans "Last Name" %}</label>
-                            {{ form.last_name }}
-                        </div>
-                        <div>
-                            <label class="block mb-2">{% trans "Account Type" %}</label>
-                            <input type="text" value="{% trans 'Standard' %}" class="w-full p-2 border rounded bg-gray-100" readonly>
-                        </div>
-                        <div>
-                            <label class="block mb-2">{% trans "Email" %}</label>
-                            {{ form.email }}
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <label class="block mb-2">{% trans "Profile" %}</label>
-                        <textarea class="w-full p-2 border rounded" rows="4">{% trans "Dedicated and driven software developer with 5+ years of experience working in fast-paced startup environments. Developed and maintained multiple web applications using Python and JavaScript. Strong problem-solving skills and ability to work collaboratively in team settings." %}</textarea>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-6 mt-6">
-                        <div>
-                            <label class="block mb-2">{% trans "Language" %}</label>
-                            <select class="w-full p-2 border rounded">
-                                <option>{% trans "English" %}</option>
-                                <option>{% trans "French" %}</option>
-                                <option>{% trans "Spanish" %}</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block mb-2">{% trans "Location" %}</label>
-                            {{ form.city }}
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <label class="block mb-2">{% trans "Change Password" %}</label>
-                        <input type="password" placeholder="{% trans 'Current password' %}" class="w-full p-2 border rounded mb-2">
-                        <input type="password" placeholder="{% trans 'New password' %}" class="w-full p-2 border rounded mb-2">
-                        <input type="password" placeholder="{% trans 'Confirm new password' %}" class="w-full p-2 border rounded">
-                    </div>
-                    
-                    <div class="mt-6">
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">{% trans "Save Changes" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="{% static 'assets/js/pages/switcher.js' %}"></script>
+
+<script src="{% static 'assets/libs/choices.js/public/assets/scripts/choices.min.js' %}"></script>
+
+     <script src="{% static 'assets/js/pages/job-list.init.js' %}"></script>
+      
+    <script src="{% static 'assets/js/pages/dropdown&modal.init.js' %}"></script>
+
+    <script src="{% static 'assets/js/pages/nav&tabs.js'  %}"></script>
+
+    <script src="{% static 'assets/js/app.js' %}"></script>
+
 {% endblock %}

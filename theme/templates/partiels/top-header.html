@@ -1,0 +1,60 @@
+{% load static %}
+{% load static i18n %}
+
+<div class="hidden px-5 mx-auto border-gray-200 container-fluid lg:px-24 bg-gray-50 md:block dark:bg-neutral-600">
+    <div class="grid items-center grid-cols-12">
+        <div class="col-span-7">
+            <ul class="flex items-center py-3">
+                <li class="ltr:mr-4 rtl:ml-4">
+                    <p class="mb-0 text-gray-800 text-13 dark:text-gray-50"> <i class="mdi mdi-social-network"></i> {% trans 'Contact us:' %} <a href="javascript:void(0)" class="font-medium"></a></p>
+                </li>
+                <li>
+                    <ul class="flex flex-wrap gap-4 text-gray-800 ">
+                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-whatsapp"></i></a></li>
+                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-facebook-messenger-alt"></i></a></li>
+                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-instagram"></i></a></li>
+                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-envelope"></i></a></li>
+                        <li class="transition-all duration-200 ease-in hover:text-green-500 dark:text-gray-50 dark:hover:text-green-500"><a href="javascript:void(0)" class="social-link"><i class="uil uil-twitter-alt"></i></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-span-5 ltr:ml-auto rtl:mr-auto">
+            <ul class="flex items-center gap-4">
+                <li>
+                    <a href="{% url 'login'%}" class="py-3 font-medium text-gray-800 text-13 dark:text-gray-50" data-tw-toggle="modal" data-tw-target="#modal-id_form"><i class="uil uil-lock ltr:mr-1 rtl:ml-1"></i>{% trans "Login" %}</a>
+               
+                    
+                </li>
+                <li>
+                    <div class="relative hidden dropdown language sm:block">
+                        <button class="px-4 py-3 border-0 btn dropdown-toggle" type="button" data-dropdown-toggle="navNotifications">
+                            <img src="{% static 'assets/images/flags/us.jpg' %}" alt="" class="h-4" id="header-lang-img">
+                        </button>
+                        <div class="absolute z-50 hidden w-40 bg-white rounded shadow dropdown-menu" id="navNotifications">
+                            <ul class="border">
+                                <form action="{% url 'set_language' %}" method="post">
+                                    {% csrf_token %}
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <select name="language" onchange="this.form.submit(); updateFlag(this.value);" class="block w-full px-4 py-2 text-sm text-gray-700 bg-white border-0 appearance-none hover:bg-gray-50/50 dark:text-gray-200">
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% get_available_languages as LANGUAGES %}
+                                        {% get_language_info_list for LANGUAGES as languages %}
+                                        {% for language in languages %}
+                                            <option id="lang-{{ language.code }}" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                                <img src="{% static 'assets/images/flags/'|add:language.code|add:'.jpg' %}" alt="{{ language.name_local }}" class="inline-block h-3 mr-1"> {{ language.name_local }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
