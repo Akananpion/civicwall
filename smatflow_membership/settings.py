@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "tailwind",
     "theme",
-    "django_browser_reload",
+    # "django_browser_reload",
     "django_countries",
     "civicwall",
     'widget_tweaks',
@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    # "django_browser_reload.middleware.BrowserReloadMiddleware",
 
     'django.middleware.locale.LocaleMiddleware',
 ]
