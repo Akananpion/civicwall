@@ -75,11 +75,6 @@
       args:
         chdir: "{{ project_dir }}"
 
-   - name: Run Django CollectStatic
-      command: "{{ executable_py }} manage.py collectstatic --noinput"
-      args:
-        chdir: "{{ project_dir }}"
-
     - name: Install Tailwind CSS dependencies
       command: "{{ executable_py }} manage.py tailwind install"
       args:
@@ -89,6 +84,13 @@
       command: "{{ executable_py }} manage.py tailwind build"
       args:
         chdir: "{{ project_dir }}"
+
+
+   - name: Run Django CollectStatic
+      command: "{{ executable_py }} manage.py collectstatic --noinput"
+      args:
+        chdir: "{{ project_dir }}"
+
 
     - name: Configure Gunicorn to run as a service
       become: true
