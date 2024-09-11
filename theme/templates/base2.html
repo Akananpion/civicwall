@@ -1,23 +1,8 @@
-{% load static tailwind_tags %}
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}" dir="ltr" data-mode="light" class="scroll-smooths group" data-theme-color="violet">
 <head>
-    <meta charset="utf-8" />
-    <title>{% block title %}Civic Wall{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta content="Tailwind Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="" name="Themesbrand" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- App favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/icons.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/tailwind.css' %}" />
-
-
-    {% block extra_css %}{% endblock %}
+    {% include 'partiels/header.html' %}
 </head>
 <body class="bg-white dark:bg-neutral-800">
 
