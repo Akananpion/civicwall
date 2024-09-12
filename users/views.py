@@ -14,6 +14,9 @@ from django.db import IntegrityError
 from django.contrib.auth import logout
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def send_verification_email(request, user):
@@ -89,11 +92,18 @@ def activate(request, uidb64, token):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, instance=request.user)
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            if 'profile_picture' in request.FILES:
+                user.profile_picture = request.FILES['profile_picture']
+                logger.debug(f"Profile picture uploaded: {user.profile_picture.name}")
+            user.save()
+            logger.debug(f"User saved. Profile picture path: {user.profile_picture.path if user.profile_picture else 'No picture'}")
             messages.success(request, _('Your profile has been updated.'))
             return redirect('profile')
+        else:
+            logger.debug(f"Form errors: {form.errors}")
     else:
         form = CustomUserChangeForm(instance=request.user)
     

@@ -16,11 +16,12 @@ class CustomUserCreationForm(UserCreationForm):
         return user
 
 class CustomUserChangeForm(forms.ModelForm):
-    email = forms.EmailField(disabled=True)
-
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'phone_number', 'country', 'region', 'city', 'email')
+        fields = ('first_name', 'last_name', 'email', 'phone_number', 'country', 'region', 'city', 'profile_picture')
+        widgets = {
+            'email': forms.EmailInput(attrs={'readonly': 'readonly'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

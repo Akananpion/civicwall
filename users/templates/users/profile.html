@@ -98,7 +98,7 @@
                     <div class="col-span-12 lg:col-span-8">
                         <div class="border rounded border-gray-100/50 dark:border-neutral-600">
                             <div class="p-6">
-                                <form method="POST" enctype="multipart/form-data">
+                                <form method="POST" enctype="multipart/form-data" id="profileForm">
                                     {% csrf_token %}
                                     <div>
                                         <h5 class="mb-3 text-gray-900 fs-17 fw-semibold dark:text-gray-50">{% trans "My Account" %}</h5>
@@ -161,9 +161,17 @@
                                                 <div class="mb-3">
                                                     <label for="language" class="text-sm text-gray-900 dark:text-gray-50">{% trans "Language" %}</label>
                                                     <select class="w-full mt-1 text-gray-500 border rounded border-gray-100/50 dark:bg-transparent dark:border-neutral-600" name="language">
-                                                        <option value="en" {% if user.profile.language == 'en' %}selected{% endif %}>{% trans "English" %}</option>
+                                                        {% get_available_languages as LANGUAGES %}
+                                                        {% get_language_info_list for LANGUAGES as languages %}
+                                                        {% comment %} <option value="en" {% if user.profile.language == 'en' %}selected{% endif %}>{% trans "English" %}</option>
                                                         <option value="fr" {% if user.profile.language == 'fr' %}selected{% endif %}>{% trans "French" %}</option>
-                                                        <option value="es" {% if user.profile.language == 'es' %}selected{% endif %}>{% trans "Spanish" %}</option>
+                                                        <option value="es" {% if user.profile.language == 'es' %}selected{% endif %}>{% trans "Spanish" %}</option> {% endcomment %}
+                                                        {% for language in languages %}
+                                                        <option id="lang-{{ language.code }}" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                                            {% comment %} <img src="{% static 'assets/images/flags/'|add:language.code|add:'.jpg' %}" alt="{{ language.name_local }}" class="inline-block h-3 mr-1"> {{ language.name_local }} {% endcomment %}
+                                                            {{ language.name_local }}
+                                                        </option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
@@ -212,6 +220,23 @@
         </section>
     </div>
 </div>
+
+<script>
+    function previewImg() {
+        const file = document.getElementById("profile-img-file-input").files[0];
+        const reader = new FileReader();
+    
+        reader.onloadend = function () {
+            document.getElementById("profile-img").src = reader.result;
+        }
+    
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById("profile-img").src = "{% static 'images/default_profile.png' %}";
+        }
+    }
+</script>
 
 <script src="{% static 'assets/js/pages/switcher.js' %}"></script>
 
